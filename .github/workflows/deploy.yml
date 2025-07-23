@@ -1,4 +1,4 @@
-name: 🚀 Deploy to FTP
+name: 🚀 Deploy React to FTP
 
 on:
   push:
@@ -6,11 +6,17 @@ on:
       - main
 
 jobs:
-  ftp-deploy:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Get latest code
+      - name: Checkout repo
         uses: actions/checkout@v3
+
+      - name: Build React app
+        working-directory: frontend
+        run: |
+          npm install
+          npm run build
 
       - name: Deploy to FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
@@ -18,6 +24,6 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftp
           server-dir: httpdocs/
-          local-dir: ./
+          local-dir: frontend/build
+          protocol: ftp
