@@ -1,0 +1,24 @@
+name: 🔥 Deploy Flask Backend to FTP
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v3
+
+      - name: 🚀 Deploy backend via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: httpdocs/api/   # <-- измени, если путь другой
+          local-dir: backend_deploy/  # папка с backend (там где run.py)
+          protocol: ftp
